@@ -13,7 +13,6 @@ export class EntriesDto {
   @Min(3)
   readonly size: number;
 
-  @IsOptional()
   @IsNotEmpty()
   @IsEnum(Direction, {
     message: 'Input must be "horizontal" and "vertical" value only',

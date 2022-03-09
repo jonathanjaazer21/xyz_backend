@@ -16,7 +16,7 @@ export class UserService {
     },
   ];
 
-  async findUser(username: string): Promise<User> {
-    return this.users.find((user) => user.username === username);
+  async findUser(username: string, password: string): Promise<User> {
+    return this.users.find((user) => user.username === username && user.password === password);
   }
 }
