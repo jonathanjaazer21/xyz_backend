@@ -75,13 +75,15 @@ export class AppService {
 
   private handleDirection(patterns: any[], direction: string): any[] {
     const patternDirection: any[] = [];
-    if (direction === Direction.HORIZONTAL) {
+    if (direction === Direction.VERTICAL) {
       patterns.forEach((letterPattern: any[]) => {
         letterPattern.forEach((patternRow: any[]) => {
           patternDirection.push(patternRow);
         });
+        patternDirection.push([]);
       });
     } else {
+      const space = [' '];
       patterns.forEach((letterPattern: any[]) => {
         letterPattern.forEach((patternRow: any[], index: number) => {
           if (patternDirection[index] === undefined) {
@@ -89,6 +91,7 @@ export class AppService {
           } else {
             patternDirection[index] = [
               ...patternDirection[index],
+              ...space,
               ...patternRow,
             ];
           }
