@@ -1,38 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PatternDto } from './dto/pattern.dto';
+import { PatternCommands } from './pattern.commands';
 
 @Injectable()
 export class PatternZService {
-  private spaceValue = ' ';
-  // produce an array of "o" and ""
-  private filledWithValue = (count: number, _size: number) => {
-    const arrayList = [];
-    const containerList = new Array(_size)
-      .fill('')
-      .map((n, index) => index + 1);
-
-    containerList.forEach((containerCount) => {
-      if (count === containerCount) {
-        arrayList.push('o');
-      } else {
-        arrayList.push(this.spaceValue);
-      }
-    });
-    return arrayList;
-  };
+  constructor(private readonly patternCommands: PatternCommands) {}
 
   private createStraightLine(_size: number) {
     return new Array(_size).fill('').map(() => 'o');
-  }
-
-  private createBackwardSlant(_size: number) {
-    const pattern: any[] = [];
-    // line forward pattern
-    for (let count = _size; count >= 1; count--) {
-      const listOfValue: string[] = this.filledWithValue(count, _size);
-      pattern.push([...listOfValue]);
-    }
-    return pattern;
   }
 
   private mergePatterns(
@@ -63,7 +38,9 @@ export class PatternZService {
 
   interpretPattern(pattern: PatternDto): any[] {
     if (pattern.letter === 'z' || pattern.letter === 'Y') {
-      const backwardSlant: any[] = this.createBackwardSlant(pattern.size);
+      const backwardSlant: any[] = this.patternCommands.createBackwardSlant(
+        pattern.size,
+      );
       const straightLine = this.createStraightLine(pattern.size);
       const mergedPattern: any[] = this.mergePatterns(
         backwardSlant,

@@ -1,25 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PatternDto } from './dto/pattern.dto';
+import { PatternCommands } from './pattern.commands';
 
 @Injectable()
 export class PatternYService {
-  private spaceValue = ' ';
-  // produce an array of "o" and ""
-  private filledWithValue = (count: number, _size: number) => {
-    const arrayList = [];
-    const containerList = new Array(_size)
-      .fill('')
-      .map((n, index) => index + 1);
-
-    containerList.forEach((containerCount) => {
-      if (count === containerCount) {
-        arrayList.push('o');
-      } else {
-        arrayList.push(this.spaceValue);
-      }
-    });
-    return arrayList;
-  };
+  constructor(private readonly patternCommands: PatternCommands) {}
 
   // produce an array of "o" and ""
   private handleHalfVerticalStraightLine = (
@@ -36,30 +21,10 @@ export class PatternYService {
       if (containerCount === halfCountSize && count <= halfCountSize) {
         arrayList.push('o');
       } else {
-        arrayList.push(this.spaceValue);
+        arrayList.push(this.patternCommands.spaceValue);
       }
     });
     return arrayList;
-  };
-
-  private createForwardSlant = (_size: number) => {
-    const pattern: any[] = [];
-    // line forward pattern
-    for (let count = 1; count <= _size; count++) {
-      const listOfValue: string[] = this.filledWithValue(count, _size);
-      pattern.push([...listOfValue]);
-    }
-    return pattern;
-  };
-
-  private createBackwardSlant = (_size: number) => {
-    const pattern: any[] = [];
-    // line forward pattern
-    for (let count = _size; count >= 1; count--) {
-      const listOfValue: string[] = this.filledWithValue(count, _size);
-      pattern.push([...listOfValue]);
-    }
-    return pattern;
   };
 
   private createHalfVerticalStraight = (
@@ -96,7 +61,8 @@ export class PatternYService {
 
       // backward slanting line
       backwardArrayList.forEach((letter: string, letterIndex: number) => {
-        if (letter !== this.spaceValue) mergedLetter[letterIndex] = letter;
+        if (letter !== this.patternCommands.spaceValue)
+          mergedLetter[letterIndex] = letter;
       });
 
       // downward strain line
@@ -111,8 +77,12 @@ export class PatternYService {
   interpretPattern(pattern: PatternDto): any[] {
     if (pattern.letter === 'y' || pattern.letter === 'Y') {
       const halfCountSize = pattern.size / 2 + 0.5;
-      const forwardSlant: any[] = this.createForwardSlant(pattern.size);
-      const backwardSlant: any[] = this.createBackwardSlant(pattern.size);
+      const forwardSlant: any[] = this.patternCommands.createForwardSlant(
+        pattern.size,
+      );
+      const backwardSlant: any[] = this.patternCommands.createBackwardSlant(
+        pattern.size,
+      );
       const verticalStraight = this.createHalfVerticalStraight(
         pattern.size,
         halfCountSize,
