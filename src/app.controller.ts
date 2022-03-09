@@ -30,4 +30,16 @@ export class AppController {
         'Please open the console on the backend to see the output result',
     };
   }
+
+  @Post('xyzNoAuth')
+  createXyzNoAuth(@Body() body: EntriesDto): any {
+    const drawing: [] = this.appService.interpretPattern(body);
+    drawing.forEach((lineRow: any[]) => {
+      console.log(lineRow.join(' '));
+    });
+    return {
+      message:
+        'Please open the console on the backend to see the output result',
+    };
+  }
 }
