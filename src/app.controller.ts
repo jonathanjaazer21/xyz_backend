@@ -14,7 +14,7 @@ export class AppController {
     });
     return {
       message:
-        'Please open the terminal of the backend to see the output result',
+        'Please open the console on the backend to see the output result',
     };
   }
 }
